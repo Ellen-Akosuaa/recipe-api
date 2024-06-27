@@ -1,33 +1,22 @@
 import { Router } from "express";
-import { RecipeModel } from "../models/recipe.js";
+import { deleteRecipe, getRecipe, getRecipes, patchRecipe, postRecipes } from "../controllers/recipe_controller.js";
+
 
 // Create Router
 const recipeRouter = Router();
 
+
 //Define routes 
 
-recipeRouter.get('/recipes', (req, res) => {
-    res.json('All Recipes');
-});
+recipeRouter.get('/recipes', getRecipes);
 
-recipeRouter.post('/recipes', async (req, res) => {
-    // Add recipe to database
-    await RecipeModel.create(req.body);
-    // Return response
-    res.json("Recipe Added")
-});
+recipeRouter.post('/recipes', postRecipes);
 
-recipeRouter.patch('/recipes/:id', (req, res) => {
-    res.json(`Recipe with Id ${req.params.id} Updated`);
-});
+recipeRouter.patch('/recipes/:id', patchRecipe);
 
-recipeRouter.delete('/recipes/:id', (req, res) => {
-    res.json(`Recipe with Id ${req.params.id} Deleted`);
-});
+recipeRouter.delete('/recipes/:id', deleteRecipe);
 
-recipeRouter.get('/recipes/:id', (req, res) => {
-    res.json(`Recipe with Id ${req.params.id} Added`);
-});
+recipeRouter.get('/recipes/:id', getRecipe);
 
 // Export router
 export default recipeRouter;
