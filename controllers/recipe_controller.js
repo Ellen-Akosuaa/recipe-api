@@ -1,6 +1,6 @@
 import { RecipeModel } from "../models/recipe.js";
 
-export const getRecipes =  async (req, res, next) => {
+export const getRecipes = async (req, res, next) => {
     try {
         // Get all recipes from database
         const allRecipes = await RecipeModel.find();
@@ -24,8 +24,17 @@ export const postRecipes = async (req, res, next) => {
 }
 
 // Patch Recipe
-export const patchRecipe =  (req, res) => {
-    res.json(`Recipe with Id ${req.params.id} Updated`);
+export const patchRecipe = async (req, res, next) => {
+    try {
+        // Update recipe by id
+        const updatedRecipe = await RecipeModel.findByIdAndUpdate(req.params.id, req.body);
+        // Return response
+        res.json(updatedRecipe, {new: true});
+    } catch (error) {
+        next(error);
+
+    }
+
 }
 
 
@@ -38,13 +47,35 @@ export const deleteRecipe = async (req, res, next) => {
         // return response
         res.json(`Recipe with Id ${req.params.id} Deleted`);
     } catch (error) {
-        next (error);
+        next(error);
     }
-    
-        
-    }
+
+
+}
 
 // Get Recipe
 export const getRecipe = (req, res) => {
     res.json(`Recipe with Id ${req.params.id} Added`);
 }
+
+
+// // PATCH /recipes/:id
+// export const patchRecipe = async (req, res, next) => {
+//     try {
+//         const { id } = req.params;
+
+//         // Find the recipe by ID
+//         const recipe = await RecipeModel.findById(id);
+
+//         // Update the 'favourites' field to true
+//         recipe.favourite = true;
+
+//         // Save the updated recipe
+//         await recipe.save();
+
+//         // Return response
+//         res.json({ message: "Recipe favourites updated to true", recipe });
+//     } catch (error) {
+//         next(error);
+//     }
+// }
